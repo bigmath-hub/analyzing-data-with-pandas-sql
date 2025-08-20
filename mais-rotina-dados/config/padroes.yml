@@ -1,0 +1,9 @@
+matching:
+  pesos:
+    habilidades: 0.45
+    idiomas: 0.30
+    regiao: 0.20
+    bonus: 0.05
+  threshold_padrao: 80
+  must_have:
+    idiomas: [ingles]

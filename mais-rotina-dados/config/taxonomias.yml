@@ -1,0 +1,19 @@
+idiomas: [ingles, arabe_basico, portugues, frances]
+
+habilidades: [
+  ensino_biblico, evangelismo, discipulado, logistica, primeiros_socorros, saude_basica, administracao, ti_suporte, traducao_interpretacao
+]
+
+regioes: [mena, africa_norte, africa_este, asia_sul, america_sul]
+
+paises: 
+
+  mena: [jordania, iraque, libano, siria]
+  africa_norte: [egito]
+  africa_este: [quenia]
+  asia_sul: [paquistao]
+  america_sul: [brasil]
+
+tipos: [local, curto, medio, longo]
+status: [rascunho, publicada, em_selecao, preenchida, expirada]
+risco_nivel: [baixo, medio, alto]
