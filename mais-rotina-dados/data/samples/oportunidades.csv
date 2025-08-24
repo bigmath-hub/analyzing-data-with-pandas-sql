@@ -1,0 +1,21 @@
+id,titulo,pais,status,tipo,habilidades_requeridas,idiomas_requeridos,pna,risco_nivel,contato_url
+V001,Discipulado em Jordania,jordania,em_selecao,curto,discipulado,ingles,nao,baixo,https://contato.exemplo/v001
+V002,Ensino Biblico em Jordania,jordania,publicada,curto,"ensino_biblico,logistica,saude_basica","arabe_basico,frances",nao,baixo,https://contato.exemplo/v002
+V003,Logistica em Egito,egito,em_selecao,medio,logistica,"frances,ingles",nao,medio,https://contato.exemplo/v003
+V004,Administracao em Quenia,quenia,rascunho,longo,"administracao,ensino_biblico,evangelismo","frances,portugues",sim,baixo,https://contato.exemplo/v004
+V005,Evangelismo em Iraque,iraque,em_selecao,local,evangelismo,"arabe_basico,portugues",nao,medio,https://contato.exemplo/v005
+V006,Evangelismo em Egito,egito,em_selecao,curto,"evangelismo,primeiros_socorros,traducao_interpretacao",arabe_basico,sim,medio,https://contato.exemplo/v006
+V007,Ensino Biblico em Quenia,quenia,em_selecao,local,ensino_biblico,"arabe_basico,frances",sim,alto,https://contato.exemplo/v007
+V008,Discipulado em Quenia,quenia,preenchida,longo,"discipulado,ti_suporte,traducao_interpretacao",arabe_basico,nao,alto,https://contato.exemplo/v008
+V009,Discipulado em Quenia,quenia,expirada,longo,"discipulado,logistica","frances,ingles",nao,baixo,https://contato.exemplo/v009
+V010,Administracao em Egito,egito,expirada,local,"administracao,ti_suporte","ingles,portugues",nao,alto,https://contato.exemplo/v010
+V011,Administracao em Brasil,brasil,em_selecao,local,"administracao,discipulado","ingles,portugues",nao,medio,https://contato.exemplo/v011
+V012,Evangelismo em Brasil,brasil,expirada,local,"evangelismo,logistica,primeiros_socorros","arabe_basico,portugues",nao,alto,https://contato.exemplo/v012
+V013,Saude Basica em Libano,libano,preenchida,local,saude_basica,"arabe_basico,ingles",sim,alto,https://contato.exemplo/v013
+V014,Discipulado em Jordania,jordania,preenchida,local,"discipulado,saude_basica,traducao_interpretacao","arabe_basico,frances",nao,alto,https://contato.exemplo/v014
+V015,Administracao em Paquistao,paquistao,expirada,curto,"administracao,primeiros_socorros,saude_basica","frances,portugues",nao,baixo,https://contato.exemplo/v015
+V016,Logistica em Egito,egito,em_selecao,local,"logistica,primeiros_socorros,traducao_interpretacao",ingles,sim,alto,https://contato.exemplo/v016
+V017,Evangelismo em Iraque,iraque,rascunho,local,"evangelismo,logistica","frances,ingles",nao,alto,https://contato.exemplo/v017
+V018,Evangelismo em Brasil,brasil,publicada,longo,"evangelismo,logistica",frances,nao,medio,https://contato.exemplo/v018
+V019,Evangelismo em Paquistao,paquistao,rascunho,local,"evangelismo,saude_basica",arabe_basico,sim,medio,https://contato.exemplo/v019
+V020,Evangelismo em Egito,egito,publicada,medio,"evangelismo,logistica","frances,ingles",nao,alto,https://contato.exemplo/v020
