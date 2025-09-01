@@ -14,7 +14,7 @@ def read_yaml_text(path: str) -> str:
         file_string = config_file_path.read_text(encoding='utf-8')    
     except:
         raise FileNotFoundError(f"Error: o arquivo '{config_file_path}' nao encontrado.")
-    
+            
     return file_string
 
 def parse_yaml(file_string: str) -> dict:
