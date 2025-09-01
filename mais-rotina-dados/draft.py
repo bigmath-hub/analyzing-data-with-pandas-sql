@@ -67,13 +67,25 @@ if __name__ == '__main__':
 """
 
 
-name = 'assange'
+
 
 """
+name = 'assange'
 file = open('names.txt', "a")
 file.write(f"{name}\n")
 file.close()
-"""
 
 with open('names.txt', 'a') as file:
     file.write(f"{name}\n")
+
+"""
+
+
+name = 'orange, banana, apple'
+
+word_list = name.split(",")
+print(word_list)
+
+clear_words = [word.strip() for word in word_list]
+
+print(set(clear_words))

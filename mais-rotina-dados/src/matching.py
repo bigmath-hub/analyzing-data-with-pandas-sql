@@ -2,12 +2,19 @@ import yaml
 from pathlib import Path
 
 def main():
-    text = read_yaml_text('config/padroes.yml')
-    cfg_dict = parse_yaml(text)
-    cfg = load_cfg(cfg_dict)
-    print(cfg["matching"]["pesos"])    
-    print(sum(cfg["matching"]["pesos"].values()))
-    
+    cfg = load_cfg('config/padroes.yml')
+    print(validate_cfg(cfg))
+    print(f"pesos: {cfg['matching']['pesos']}")
+    print(f"SOMA_PESOS {sum(cfg['matching']['pesos'].values())}")
+
+
+def load_cfg(path: str) -> dict:
+    texto = read_yaml_text(path)
+    cfg = parse_yaml(texto)    
+    cfg_ok = validate_cfg(cfg)
+
+    return cfg
+
 def read_yaml_text(path: str) -> str:
     config_file_path = Path(path)
     try:    
@@ -19,11 +26,12 @@ def read_yaml_text(path: str) -> str:
 
 def parse_yaml(file_string: str) -> dict:
     config_data = yaml.safe_load(file_string)
-    return config_data   
+    return config_data
 
-def load_cfg(file_dict: dict) -> dict:
+
+def validate_cfg(cfg: dict) -> str:
     try:
-        matching = file_dict['matching']
+        matching = cfg['matching']
     except KeyError:
         raise ValueError("Deve conter 'matching' key")
         
@@ -39,17 +47,16 @@ def load_cfg(file_dict: dict) -> dict:
     if check_required != required:
         raise ValueError("Erro nas chaves requeridas em 'matching['pesos']")            
         
-    count = 0
-    for value in file_dict['matching']['pesos'].values():
-        count += value
-    if not abs(count - 1.0) < 1e-9:
+    soma = 0
+    for value in cfg['matching']['pesos'].values():
+        soma += value
+    if not abs(soma - 1.0) < 1e-9:
         raise ValueError(f"Soma dos pesos deve ser ~1.0 e foi {count}")
         
     if 'must_have' not in matching:
         matching['must_have'] = {}
 
-    return file_dict   
-
+    return f"CFG_OK"
 
 if __name__ == "__main__":
     main()
