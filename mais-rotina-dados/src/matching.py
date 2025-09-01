@@ -51,12 +51,16 @@ def validate_cfg(cfg: dict) -> str:
     for value in cfg['matching']['pesos'].values():
         soma += value
     if not abs(soma - 1.0) < 1e-9:
-        raise ValueError(f"Soma dos pesos deve ser ~1.0 e foi {count}")
+        raise ValueError(f"Soma dos pesos deve ser ~1.0 e foi {soma}")
         
     if 'must_have' not in matching:
         matching['must_have'] = {}
 
     return f"CFG_OK"
+
+def to_set(cell: str) -> set[str]:
+        
+
 
 if __name__ == "__main__":
     main()
