@@ -1,5 +1,6 @@
 import yaml
 from pathlib import Path
+from src.gen_dados import load_taxonomias
 
 def main():
     cfg = load_cfg('config/padroes.yml')
@@ -59,7 +60,25 @@ def validate_cfg(cfg: dict) -> str:
     return f"CFG_OK"
 
 def to_set(cell: str) -> set[str]:
-        
+    # se entrada vazia retorna um conjunto vazio
+    if not cell:
+        return set()           
+    
+    # lista contendo os itens de entrada
+    parts = str(cell).split(",")    
+    
+    # remover os espacos e padronizar os nomes
+    trimmed = [p.strip().lower() for p in parts]    
+    
+    # remove os itens vazios e normaliza os campos
+    filtered = [p for p in trimmed if p]
+
+    return set(filtered) # retorna um set      
+
+def pais_para_regiao(tax: dict, pais: str) -> str | None:
+    for raw in tax['paises'].items():
+        if pais in raw[1]:
+            return raw[0]            
 
 
 if __name__ == "__main__":

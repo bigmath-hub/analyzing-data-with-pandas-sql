@@ -79,7 +79,7 @@ with open('names.txt', 'a') as file:
     file.write(f"{name}\n")
 
 """
-"""
+
 def to_set(cell: str) -> set[str]:
     
     # se entrada vazia retorna um conjunto vazio
@@ -101,7 +101,7 @@ print(to_set("ingles,arabe_basico"))
 print(to_set("  ingles ,  arabe_basico ,,  "))
 print(to_set(""))
 
-"""
+
 """
 name = 'orange, banana, apple'
 
@@ -111,24 +111,3 @@ print(word_list)
 clear_words = [word.strip() for word in word_list]
 
 print(set(clear_words))"""
-
-
-from src.gen_dados import load_taxonomias
-
-def pais_para_regiao(tax: dict, pais: str) -> str | None:
-    for raw in tax['paises'].items():
-        if pais in raw[1]:
-            return raw[0]
-
-
-tax = load_taxonomias()
-print(pais_para_regiao(tax, "jordania"))
-print(pais_para_regiao(tax, "egito"))
-print(pais_para_regiao(tax, "brasil"))
-print(pais_para_regiao(tax, "canada"))   # fora da taxonomia → None
-
-
-mena
-africa_norte
-america_sul
-None
