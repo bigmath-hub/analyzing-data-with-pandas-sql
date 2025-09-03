@@ -1,12 +1,19 @@
-import yaml
 from pathlib import Path
-from src.gen_dados import load_taxonomias
+import yaml
+from gen_dados import load_taxonomias
 
 def main():
-    cfg = load_cfg('config/padroes.yml')
-    print(validate_cfg(cfg))
-    print(f"pesos: {cfg['matching']['pesos']}")
-    print(f"SOMA_PESOS {sum(cfg['matching']['pesos'].values())}")
+    print(overlap_requeridos("logistica,ensino_biblico", "logistica"))        # 0.5
+    print(overlap_requeridos("ingles,arabe_basico", "frances,ingles"))        # 0.5
+    print(overlap_requeridos("", "qualquer,coisa"))                            # 1.0
+
+    tax = load_taxonomias()
+    print(regiao_hit("jordania", "mena,asia_sul", tax))   # 1.0
+    print(regiao_hit("egito", "america_sul", tax))        # 0.0
+
+    print(bonus_val("sim","alto","sim","nao"))   # 0.5
+    print(bonus_val("nao","baixo","sim","sim"))  # 0.0
+    print(bonus_val("sim","medio","sim","sim"))  # 1.0
 
 
 def load_cfg(path: str) -> dict:
@@ -78,8 +85,35 @@ def to_set(cell: str) -> set[str]:
 def pais_para_regiao(tax: dict, pais: str) -> str | None:
     for raw in tax['paises'].items():
         if pais in raw[1]:
-            return raw[0]            
+            return raw[0]
 
+def overlap_requeridos(req_csv: str, have_csv: str) -> float:    
+    required = to_set(req_csv)
+    have = to_set(have_csv)
+
+    inter = required & have
+
+    if len(required) == 0:
+        return 1.0
+
+    fator = len(inter) / len(required)
+    return fator
+
+def regiao_hit(vaga_pais, cand_regioes_csv, tax) -> float:    
+    vaga_regioes = pais_para_regiao(tax, vaga_pais) # regiao disponivel para a vaga -> str
+    cand_regioes = to_set(cand_regioes_csv) # disponibilidade do candidato -> set()
+
+    if vaga_regioes in cand_regioes:
+        return 1.0
+
+    return 0.0
+
+
+def bonus_val(o_pna, o_risco, c_aceita_pna, c_aceita_risco) -> float:    
+    b1 = 1.0 if o_pna=='sim' and c_aceita_pna=='sim' else 0.0
+    b2 = 1.0 if o_risco in {'medio', 'alto'} and c_aceita_risco=='sim' else 0.0
+
+    return (b1 + b2) / 2
 
 if __name__ == "__main__":
     main()

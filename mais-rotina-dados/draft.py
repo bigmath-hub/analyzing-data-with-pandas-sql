@@ -113,7 +113,7 @@ clear_words = [word.strip() for word in word_list]
 print(set(clear_words))"""
 
 
-from src.gen_dados import load_taxonomias
+"""from src.gen_dados import load_taxonomias
 
 def pais_para_regiao(tax: dict, pais: str) -> str | None:
     for raw in tax['paises'].items():
@@ -132,3 +132,15 @@ mena
 africa_norte
 america_sul
 None
+"""
+
+set1 = {'logistica', 'ensino_biblico'}
+set2 = {'logistica'}
+
+sub_set = set1 - set2
+
+print(sub_set)
+
+# preciso aplicar a formula para obter o fator
+factor = len(sub_set) / len(set1)
+print(factor)
