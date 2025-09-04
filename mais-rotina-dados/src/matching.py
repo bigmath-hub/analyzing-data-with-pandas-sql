@@ -1,20 +1,18 @@
+import pandas as pd
 from pathlib import Path
 import yaml
 from gen_dados import load_taxonomias
 
 def main():
-    print(overlap_requeridos("logistica,ensino_biblico", "logistica"))        # 0.5
-    print(overlap_requeridos("ingles,arabe_basico", "frances,ingles"))        # 0.5
-    print(overlap_requeridos("", "qualquer,coisa"))                            # 1.0
-
+    cfg = load_cfg("config/padroes.yml")
     tax = load_taxonomias()
-    print(regiao_hit("jordania", "mena,asia_sul", tax))   # 1.0
-    print(regiao_hit("egito", "america_sul", tax))        # 0.0
+    df_o = pd.read_csv("data/samples/oportunidades.csv")
+    df_c = pd.read_csv("data/samples/candidatos.csv")
 
-    print(bonus_val("sim","alto","sim","nao"))   # 0.5
-    print(bonus_val("nao","baixo","sim","sim"))  # 0.0
-    print(bonus_val("sim","medio","sim","sim"))  # 1.0
-
+    for i in range(3):        # 3 vagas
+        for j in range(3):    # 3 candidatos
+            s = score_pair(df_o.iloc[i], df_c.iloc[j], cfg, tax)
+            print(df_o.iloc[i]["id"], df_c.iloc[j]["id"], "=>", s)
 
 def load_cfg(path: str) -> dict:
     texto = read_yaml_text(path)
@@ -66,11 +64,11 @@ def validate_cfg(cfg: dict) -> str:
 
     return f"CFG_OK"
 
-def to_set(cell: str) -> set[str]:
+def to_set(cell) -> set[str]:
     # se entrada vazia retorna um conjunto vazio
     if not cell:
-        return set()           
-    
+        return set()              
+        
     # lista contendo os itens de entrada
     parts = str(cell).split(",")    
     
@@ -114,6 +112,39 @@ def bonus_val(o_pna, o_risco, c_aceita_pna, c_aceita_risco) -> float:
     b2 = 1.0 if o_risco in {'medio', 'alto'} and c_aceita_risco=='sim' else 0.0
 
     return (b1 + b2) / 2
+
+def score_pair(vaga_row, cand_row, cfg, tax):
+    # ler os pesos
+    w = cfg['matching']['pesos']
+    # se existir must have
+    if cfg["matching"]["must_have"].get("idiomas"):
+        must_have_w = to_set(cfg["matching"]["must_have"].get("idiomas"))
+        print(type(must_have_w), must_have_w)
+        must_have = set(cfg["matching"]["must_have"].get("idiomas"))
+        print(type(must_have), must_have)
+        cand = to_set(cand_row["idiomas"])        
+        if not must_have.issubset(cand):
+            
+            return 0.0
+    # componentes do score
+    s_hab = overlap_requeridos(
+        vaga_row['habilidades_requeridas'], cand_row['habilidades']
+    )    
+    s_idi = overlap_requeridos(
+        vaga_row['idiomas_requeridos'], cand_row['idiomas']
+    )
+    s_reg = regiao_hit(vaga_row['pais'], cand_row['regioes_preferidas'], tax)
+    s_bon = bonus_val(
+        vaga_row['pna'], vaga_row['risco_nivel'],
+        cand_row['aceita_pna'], cand_row['aceita_risco']
+    )
+    raw = w["habilidades"]*s_hab + w["idiomas"]*s_idi + w['regiao']*s_reg + w['bonus']*s_bon
+    score = round(100*raw, 1)
+
+    print("comp:", s_hab, s_idi, s_reg, s_bon)
+
+
+    return score
 
 if __name__ == "__main__":
     main()

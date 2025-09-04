@@ -134,7 +134,7 @@ america_sul
 None
 """
 
-set1 = {'logistica', 'ensino_biblico'}
+"""set1 = {'logistica', 'ensino_biblico'}
 set2 = {'logistica'}
 
 sub_set = set1 - set2
@@ -143,4 +143,50 @@ print(sub_set)
 
 # preciso aplicar a formula para obter o fator
 factor = len(sub_set) / len(set1)
-print(factor)
+print(factor)"""
+
+
+def to_set(cell) -> set[str]:  
+
+    if isinstance(cell, list) or isinstance(cell, tuple) or isinstance(cell, set):
+        return set([str(w).strip().lower() for w in cell])
+    
+    
+    """parts = str(cell).split(",")
+    
+    # remover os espacos e padronizar os nomes
+    trimmed = [p.strip().lower() for p in parts]    
+    
+    # remove os itens vazios e normaliza os campos
+    filtered = [p for p in trimmed if p]        
+
+    return set(filtered) # retorna um set
+"""
+    """for i in cell:
+        parts = i.split(",")
+
+    trimmed = [j.strip() for j in parts]
+    print(trimmed)
+    """
+    
+    
+    
+
+
+    """# lista contendo os itens de entrada
+    parts = str(cell).split(",")    
+    
+    # remover os espacos e padronizar os nomes
+    trimmed = [p.strip().lower() for p in parts]    
+    
+    # remove os itens vazios e normaliza os campos
+    filtered = [p for p in trimmed if p]
+
+    return set(filtered) # retorna um set      
+"""
+
+print(to_set(['mat  ,    d, s']))
+print(to_set(['mat'  ,    'd', 's']))
+print(to_set(('mat', 'silva', 'dd')))
+print(to_set({'mat', 'silva', 'dd'}))
+print(to_set('matt silva dilly'))
