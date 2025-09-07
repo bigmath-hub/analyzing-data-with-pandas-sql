@@ -64,21 +64,18 @@ def validate_cfg(cfg: dict) -> str:
 
     return f"CFG_OK"
 
-def to_set(cell) -> set[str]:
-    # se entrada vazia retorna um conjunto vazio
-    if not cell:
-        return set()              
-        
-    # lista contendo os itens de entrada
-    parts = str(cell).split(",")    
-    
-    # remover os espacos e padronizar os nomes
-    trimmed = [p.strip().lower() for p in parts]    
-    
-    # remove os itens vazios e normaliza os campos
-    filtered = [p for p in trimmed if p]
+def to_set(var) -> set[str]:
 
-    return set(filtered) # retorna um set      
+    if var is None:
+        return set()
+
+    if isinstance(var, (set, list, tuple)):
+        return {str(x).strip().lower() for x in var if str(x).strip()}    
+
+    s = str(var).strip()
+    if not s:
+        return set()
+    return {x.strip().lower() for x in s.split(",") if x.strip()} 
 
 def pais_para_regiao(tax: dict, pais: str) -> str | None:
     for raw in tax['paises'].items():
@@ -106,7 +103,6 @@ def regiao_hit(vaga_pais, cand_regioes_csv, tax) -> float:
 
     return 0.0
 
-
 def bonus_val(o_pna, o_risco, c_aceita_pna, c_aceita_risco) -> float:    
     b1 = 1.0 if o_pna=='sim' and c_aceita_pna=='sim' else 0.0
     b2 = 1.0 if o_risco in {'medio', 'alto'} and c_aceita_risco=='sim' else 0.0
@@ -118,14 +114,12 @@ def score_pair(vaga_row, cand_row, cfg, tax):
     w = cfg['matching']['pesos']
     # se existir must have
     if cfg["matching"]["must_have"].get("idiomas"):
-        must_have_w = to_set(cfg["matching"]["must_have"].get("idiomas"))
-        print(type(must_have_w), must_have_w)
-        must_have = set(cfg["matching"]["must_have"].get("idiomas"))
-        print(type(must_have), must_have)
+        mh_list = cfg["matching"]["must_have"].get("idiomas")
+        must_have = to_set(mh_list)       
         cand = to_set(cand_row["idiomas"])        
-        if not must_have.issubset(cand):
-            
+        if must_have and not must_have.issubset(cand):
             return 0.0
+
     # componentes do score
     s_hab = overlap_requeridos(
         vaga_row['habilidades_requeridas'], cand_row['habilidades']
@@ -140,9 +134,6 @@ def score_pair(vaga_row, cand_row, cfg, tax):
     )
     raw = w["habilidades"]*s_hab + w["idiomas"]*s_idi + w['regiao']*s_reg + w['bonus']*s_bon
     score = round(100*raw, 1)
-
-    print("comp:", s_hab, s_idi, s_reg, s_bon)
-
 
     return score
 

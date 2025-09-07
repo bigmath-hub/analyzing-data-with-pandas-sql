@@ -146,47 +146,53 @@ factor = len(sub_set) / len(set1)
 print(factor)"""
 
 
-def to_set(cell) -> set[str]:  
+"""def to_set(cell) -> set[str]:
+    if cell is None:
+        return set()
 
-    if isinstance(cell, list) or isinstance(cell, tuple) or isinstance(cell, set):
-        return set([str(w).strip().lower() for w in cell])
-    
-    
-    """parts = str(cell).split(",")
-    
-    # remover os espacos e padronizar os nomes
-    trimmed = [p.strip().lower() for p in parts]    
-    
-    # remove os itens vazios e normaliza os campos
-    filtered = [p for p in trimmed if p]        
+    if isinstance(cell, (list, tuple, set)):
+        return [for x in cell if ]
 
-    return set(filtered) # retorna um set
-"""
-    """for i in cell:
-        parts = i.split(",")
-
-    trimmed = [j.strip() for j in parts]
-    print(trimmed)
-    """
     
-    
-    
-
-
-    """# lista contendo os itens de entrada
-    parts = str(cell).split(",")    
-    
-    # remover os espacos e padronizar os nomes
-    trimmed = [p.strip().lower() for p in parts]    
-    
-    # remove os itens vazios e normaliza os campos
-    filtered = [p for p in trimmed if p]
-
-    return set(filtered) # retorna um set      
-"""
 
 print(to_set(['mat  ,    d, s']))
 print(to_set(['mat'  ,    'd', 's']))
 print(to_set(('mat', 'silva', 'dd')))
 print(to_set({'mat', 'silva', 'dd'}))
-print(to_set('matt silva dilly'))
+print(to_set('matt silva dilly'))"""
+
+
+"""fruits = ['apple  ', '   banana', '   apple   ', ' orange', 'banana', 'apple']
+
+f = {str(x).strip().lower() for x in fruits if str(x).strip()}
+
+fruit_set = set()
+for fruit in fruits:
+    if str(fruit).strip():
+        fruit_set.add(str(fruit).strip().lower())
+print(fruit_set)
+    
+
+
+print(f)"""
+"""
+def to_set(var) -> set[str]:
+        
+    if var is None:
+        return set()
+
+    if isinstance(var, (set, list, tuple)):
+        return {str(x).strip().lower() for x in var if str(x).strip()}    
+    
+    s = str(var).strip()
+    if not s:
+        return set()
+    return {x.strip().lower() for x in s.split(",") if x.strip()}
+
+
+print(to_set(["ingles"]))                # {'ingles'}
+print(to_set("ingles,frances"))          # {'ingles', 'frances'}
+print(to_set("  ingles ,  arabe_basico ,,  "))  # {'ingles', 'arabe_basico'}
+print(to_set(None))                      # set()
+"""
+
