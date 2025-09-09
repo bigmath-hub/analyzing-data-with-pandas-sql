@@ -8,11 +8,11 @@ def main():
     tax = load_taxonomias()
     df_o = pd.read_csv("data/samples/oportunidades.csv")
     df_c = pd.read_csv("data/samples/candidatos.csv")
+    
+    cand = match_all(df_o, df_c, cfg, tax)    
 
-    for i in range(3):        # 3 vagas
-        for j in range(3):    # 3 candidatos
-            s = score_pair(df_o.iloc[i], df_c.iloc[j], cfg, tax)
-            print(df_o.iloc[i]["id"], df_c.iloc[j]["id"], "=>", s)
+    cand.to_csv("data/outputs/sugestoes.csv", index=False)    
+    print("Arquivo salvo em: data/outputs/sugestoes.csv\n")    
 
 def load_cfg(path: str) -> dict:
     texto = read_yaml_text(path)
@@ -136,6 +136,37 @@ def score_pair(vaga_row, cand_row, cfg, tax):
     score = round(100*raw, 1)
 
     return score
+
+def match_all(df_o, df_c, cfg, tax) -> pd.DataFrame:
+    TH = cfg["matching"]["threshold_padrao"]
+    vagas_validas = df_o[df_o["status"].isin(["publicada","em_selecao"])] 
+    valid = vagas_validas.reset_index(drop=True)
+    regs = []
+
+    for v in range(len(valid)):
+        for c in range(len(df_c)):
+            s = score_pair(valid.iloc[v], df_c.iloc[c], cfg, tax)
+            if s >= TH:
+                regs.append({"vaga_id": valid.iloc[v]['id'], "cand_id": df_c.iloc[c]["id"], "score": s})
+    
+    out = pd.DataFrame(regs).sort_values(["vaga_id","score"], ascending=[True,False])
+
+    TOTAL_PARES = len(valid) * len(df_c)
+    APROVADOS = len(out)
+    VAGAS_COBERTAS = out['vaga_id'].nunique()
+    
+
+    print()
+    print("Resumo:")
+    print("-------")
+    print(out.head(5))
+    print()
+    print("Total de pares:", TOTAL_PARES)
+    print("Aprovados:", APROVADOS)
+    print("Vagas Cobertas:", VAGAS_COBERTAS)
+    print()
+    
+    return out
 
 if __name__ == "__main__":
     main()
