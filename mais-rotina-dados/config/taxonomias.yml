@@ -1,3 +1,6 @@
+objetivos: [
+  medicina, bam, profissionais, subsistencia, microcredito, educacao, evangelismo, cultura
+]
 idiomas: [ingles, arabe_basico, portugues, frances]
 
 habilidades: [
@@ -17,3 +20,4 @@ paises:
 tipos: [local, curto, medio, longo]
 status: [rascunho, publicada, em_selecao, preenchida, expirada]
 risco_nivel: [baixo, medio, alto]
+urgente: [True, False]

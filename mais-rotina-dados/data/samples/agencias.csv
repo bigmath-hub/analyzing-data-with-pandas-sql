@@ -1,0 +1,11 @@
+agencia_id,nome,email,status,website,telefone
+A001,Agencia Alfa,contato@agencia-alfa.example.org,ativa,https://agencia-alfa.example.org,+55-11-5555-0101
+A002,Agencia Beta,contato@agencia-beta.example.org,ativa,https://agencia-beta.example.org,+55-21-5555-0102
+A003,Agencia Gama,contato@agencia-gama.example.org,pendente,https://agencia-gama.example.org,+55-31-5555-0103
+A004,Agencia Delta,contato@agencia-delta.example.org,ativa,https://agencia-delta.example.org,+55-41-5555-0104
+A005,Agencia Emaus,contato@agencia-emaus.example.org,pendente,https://agencia-emaus.example.org,+55-51-5555-0105
+A006,Agencia Shalom,contato@agencia-shalom.example.org,ativa,https://agencia-shalom.example.org,+55-61-5555-0106
+A007,Agencia Semente,contato@agencia-semente.example.org,ativa,https://agencia-semente.example.org,+55-71-5555-0107
+A008,Agencia Pao e Vida,contato@pao-vida.example.org,pendente,https://pao-vida.example.org,+55-81-5555-0108
+A009,Agencia Caminho Verdade,contato@caminho-verdade.example.org,ativa,https://caminho-verdade.example.org,+55-85-5555-0109
+A010,Agencia Esperanca Viva,contato@esperanca-viva.example.org,ativa,https://esperanca-viva.example.org,+55-98-5555-0110

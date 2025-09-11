@@ -13,6 +13,7 @@ def main():
 
     cand.to_csv("data/outputs/sugestoes.csv", index=False)    
     print("Arquivo salvo em: data/outputs/sugestoes.csv\n")    
+    print(tax)
 
 def load_cfg(path: str) -> dict:
     texto = read_yaml_text(path)

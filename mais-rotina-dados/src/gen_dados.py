@@ -1,7 +1,9 @@
 from pathlib import Path
 import yaml
 from random import Random
+import random
 import pandas as pd
+import numpy as np
 
 
 def load_taxonomias(path='config/taxonomias.yml'): # carregar as taxonomias
@@ -12,7 +14,17 @@ def load_taxonomias(path='config/taxonomias.yml'): # carregar as taxonomias
     faltando = req - set(tax)    
     #print(bool(faltando)) # debug
     assert not faltando, f"faltam chaves no YAML: {faltando}"
-    return tax     
+    return tax
+
+def load_agencias(path='data/samples/agencias.csv') -> list: # carregar as agencias
+    df = pd.read_csv(path)
+    agencia_id = []
+    for id in df.itertuples():
+        status = str(id.status).strip().lower()
+        if status == 'ativa':
+            agencia_id.append(str(id.agencia_id).strip())        
+    
+    return agencia_id
 
 def pick_one(rng, items): 
     return rng.choice(items)
@@ -29,13 +41,17 @@ def choose_regiao_pais(rng, tax):
     pais = pick_one(rng, tax['paises'][reg])    
     return reg, pais
 
-def gerar_oportunidades(rng, tax, n):
+
+
+
+
+def gerar_oportunidades(rng, tax, n, agencias_id):
     """
     retornar um DF    
-    """
+    """    
     registros = []
+    
     for i in range(1, n+1):
-        
         reg, pais = choose_regiao_pais(rng, tax)
         id_ = f'V{i:03d}'
         status = pick_one(rng, tax['status'])
@@ -46,7 +62,13 @@ def gerar_oportunidades(rng, tax, n):
         risco_nivel = pick_one(rng, tax['risco_nivel'])
         hab0 = habilidades_requeridas.split(",")[0]
         titulo = f"{hab0.replace('_', ' ').title()} em {pais.title()}"
-        contato_url = f"https://contato.exemplo/{id_.lower()}"
+        contato_url = f"https://contato.exemplo/{id_.lower()}"        
+        agencia = random.choice(agencias_id)
+        objetivos = pick_many(rng, tax['objetivos'], 1, 2)
+        
+        choices = tax['urgente']
+        probabilities = [0.20, 0.80] # 20% for True, 80% for False        
+        urgente = rng.choice(a=choices, p=probabilities, size=1)[0]       
 
         linha = {
             "id": id_,
@@ -59,8 +81,11 @@ def gerar_oportunidades(rng, tax, n):
             "pna": pna,
             "risco_nivel": risco_nivel,
             "contato_url": contato_url,
+            "agencia_id": agencia,
+            "objetivos": objetivos,
+            "urgente": urgente
         }
-        registros.append(linha)
+        registros.append(linha)        
 
     COLS = [
         "id",
@@ -71,7 +96,10 @@ def gerar_oportunidades(rng, tax, n):
         "habilidades_requeridas",
         "idiomas_requeridos",
         "pna","risco_nivel",
-        "contato_url"
+        "contato_url",
+        "agencia_id",
+        "objetivos",
+        "urgente"
         ]
 
     return pd.DataFrame(registros)[COLS]
@@ -133,8 +161,15 @@ rng.randint(1, 3)
 if __name__ == "__main__":  
     rng = Random(42)
     tax = load_taxonomias()
+    
+    ids = load_agencias()
+    print("N_AGENCIAS_ATIVAS:", len(ids))
+    print("PRIMEIRAS_3:", ids[:3])    
+    
+    print('\n======================================================\n')
 
-    df_o = gerar_oportunidades(rng, tax, 20)
+
+    df_o = gerar_oportunidades(rng, tax, 20, ids)
     print(df_o.head(3))
     print(df_o["status"].value_counts())
     
@@ -147,4 +182,7 @@ if __name__ == "__main__":
     df_o.to_csv("data/samples/oportunidades.csv", index=False)
     df_c.to_csv("data/samples/candidatos.csv", index=False)
     
+    ids = load_agencias()
+    print("N_AGENCIAS_ATIVAS:", len(ids))
+    print("PRIMEIRAS_3:", ids[:3])
 
