@@ -20,4 +20,4 @@ paises:
 tipos: [local, curto, medio, longo]
 status: [rascunho, publicada, em_selecao, preenchida, expirada]
 risco_nivel: [baixo, medio, alto]
-urgente: [True, False]
+urgente: ["sim", "nao"]

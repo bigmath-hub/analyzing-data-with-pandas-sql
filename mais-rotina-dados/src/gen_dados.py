@@ -1,16 +1,15 @@
 from pathlib import Path
 import yaml
 from random import Random
-import random
 import pandas as pd
-import numpy as np
+
 
 
 def load_taxonomias(path='config/taxonomias.yml'): # carregar as taxonomias
     p = Path(path)
     tax = yaml.safe_load(p.read_text(encoding='utf-8'))
     #req = {"idiomas","habilidades","regioes","paises","tipos","status","risco_nivel",'redes_sociais'}
-    req = {"idiomas","habilidades","regioes","paises","tipos","status","risco_nivel"}
+    req = {"objetivos","idiomas","habilidades","regioes","paises","tipos","status","risco_nivel","urgente"}
     faltando = req - set(tax)    
     #print(bool(faltando)) # debug
     assert not faltando, f"faltam chaves no YAML: {faltando}"
@@ -52,7 +51,7 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
     registros = []
     
     for i in range(1, n+1):
-        reg, pais = choose_regiao_pais(rng, tax)
+        _, pais = choose_regiao_pais(rng, tax)
         id_ = f'V{i:03d}'
         status = pick_one(rng, tax['status'])
         tipo = pick_one(rng, tax['tipos'])
@@ -60,15 +59,17 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
         idiomas_requeridos = pick_many(rng, tax['idiomas'], 1, 2)
         pna = "sim" if rng.random() < 0.30 else "nao"    
         risco_nivel = pick_one(rng, tax['risco_nivel'])
-        hab0 = habilidades_requeridas.split(",")[0]
+        hab0 = habilidades_requeridas.split(",")[0]        
         titulo = f"{hab0.replace('_', ' ').title()} em {pais.title()}"
         contato_url = f"https://contato.exemplo/{id_.lower()}"        
-        agencia = random.choice(agencias_id)
-        objetivos = pick_many(rng, tax['objetivos'], 1, 2)
-        
+        agencia = rng.choice(agencias_id)
+        vagas_total = rng.choice([x for x in range(5, 21)])
+        objetivos = pick_many(rng, tax['objetivos'], 1, 2)        
+        descricao_curta = f"{hab0.replace('_', ' ').title()} em {pais.title()}; foco em {objetivos.split(",")[0]}"
         choices = tax['urgente']
-        probabilities = [0.20, 0.80] # 20% for True, 80% for False        
-        urgente = rng.choice(a=choices, p=probabilities, size=1)[0]       
+        probabilities = [0.20, 0.80]        
+        urgente = rng.choices(population=choices, weights=probabilities, k=1)[0]
+
 
         linha = {
             "id": id_,
@@ -82,7 +83,9 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
             "risco_nivel": risco_nivel,
             "contato_url": contato_url,
             "agencia_id": agencia,
+            "vagas_total": vagas_total,
             "objetivos": objetivos,
+            "descricao_curta": descricao_curta,
             "urgente": urgente
         }
         registros.append(linha)        
@@ -98,7 +101,9 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
         "pna","risco_nivel",
         "contato_url",
         "agencia_id",
+        "vagas_total",
         "objetivos",
+        "descricao_curta",
         "urgente"
         ]
 
@@ -172,6 +177,7 @@ if __name__ == "__main__":
     df_o = gerar_oportunidades(rng, tax, 20, ids)
     print(df_o.head(3))
     print(df_o["status"].value_counts())
+    
     
     print('\n======================================================\n')
 

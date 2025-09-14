@@ -1,21 +1,21 @@
-id,titulo,pais,status,tipo,habilidades_requeridas,idiomas_requeridos,pna,risco_nivel,contato_url,agencia_id,objetivos,urgente
-V001,Discipulado em Jordania,jordania,em_selecao,curto,discipulado,ingles,nao,baixo,https://contato.exemplo/v001,A010,bam,False
-V002,Administracao em Egito,egito,expirada,local,"administracao,evangelismo,logistica","ingles,portugues",nao,baixo,https://contato.exemplo/v002,A009,"educacao,profissionais",False
-V003,Administracao em Egito,egito,em_selecao,local,administracao,portugues,nao,alto,https://contato.exemplo/v003,A009,"educacao,medicina",False
-V004,Primeiros Socorros em Paquistao,paquistao,preenchida,local,"primeiros_socorros,saude_basica,traducao_interpretacao",ingles,sim,baixo,https://contato.exemplo/v004,A007,"bam,evangelismo",False
-V005,Discipulado em Egito,egito,preenchida,medio,"discipulado,saude_basica","ingles,portugues",nao,alto,https://contato.exemplo/v005,A002,profissionais,True
-V006,Logistica em Brasil,brasil,publicada,longo,"logistica,primeiros_socorros","frances,ingles",nao,medio,https://contato.exemplo/v006,A009,"medicina,microcredito",False
-V007,Discipulado em Egito,egito,publicada,longo,"discipulado,ti_suporte","arabe_basico,ingles",nao,alto,https://contato.exemplo/v007,A009,"evangelismo,microcredito",False
-V008,Administracao em Paquistao,paquistao,publicada,curto,"administracao,evangelismo,ti_suporte",ingles,sim,baixo,https://contato.exemplo/v008,A007,"bam,subsistencia",False
-V009,Ensino Biblico em Paquistao,paquistao,expirada,medio,"ensino_biblico,evangelismo,saude_basica","ingles,portugues",sim,baixo,https://contato.exemplo/v009,A009,"educacao,medicina",True
-V010,Evangelismo em Quenia,quenia,expirada,local,"evangelismo,logistica,primeiros_socorros","arabe_basico,portugues",nao,alto,https://contato.exemplo/v010,A002,educacao,False
-V011,Ensino Biblico em Paquistao,paquistao,rascunho,medio,"ensino_biblico,logistica",ingles,sim,medio,https://contato.exemplo/v011,A010,profissionais,False
-V012,Administracao em Egito,egito,expirada,curto,"administracao,traducao_interpretacao",arabe_basico,nao,medio,https://contato.exemplo/v012,A007,"cultura,microcredito",False
-V013,Saude Basica em Paquistao,paquistao,publicada,curto,saude_basica,arabe_basico,nao,baixo,https://contato.exemplo/v013,A004,medicina,False
-V014,Traducao Interpretacao em Egito,egito,rascunho,medio,traducao_interpretacao,portugues,nao,baixo,https://contato.exemplo/v014,A007,cultura,False
-V015,Evangelismo em Egito,egito,preenchida,curto,evangelismo,"arabe_basico,portugues",nao,alto,https://contato.exemplo/v015,A001,bam,True
-V016,Logistica em Siria,siria,em_selecao,local,logistica,frances,sim,baixo,https://contato.exemplo/v016,A006,"bam,cultura",True
-V017,Traducao Interpretacao em Siria,siria,expirada,local,traducao_interpretacao,ingles,nao,baixo,https://contato.exemplo/v017,A010,evangelismo,True
-V018,Discipulado em Paquistao,paquistao,publicada,longo,discipulado,"arabe_basico,ingles",sim,medio,https://contato.exemplo/v018,A010,"educacao,evangelismo",False
-V019,Ensino Biblico em Brasil,brasil,publicada,curto,"ensino_biblico,logistica",portugues,sim,alto,https://contato.exemplo/v019,A006,"medicina,profissionais",False
-V020,Evangelismo em Brasil,brasil,publicada,local,"evangelismo,logistica,ti_suporte",arabe_basico,nao,baixo,https://contato.exemplo/v020,A002,evangelismo,False
+id,titulo,pais,status,tipo,habilidades_requeridas,idiomas_requeridos,pna,risco_nivel,contato_url,agencia_id,vagas_total,objetivos,descricao_curta,urgente
+V001,Discipulado em Jordania,jordania,em_selecao,curto,discipulado,ingles,nao,baixo,https://contato.exemplo/v001,A001,7,subsistencia,Discipulado em Jordania; foco em subsistencia,nao
+V002,Ti Suporte em Iraque,iraque,expirada,longo,ti_suporte,"frances,ingles",nao,medio,https://contato.exemplo/v002,A004,9,educacao,Ti Suporte em Iraque; foco em educacao,sim
+V003,Ensino Biblico em Paquistao,paquistao,em_selecao,medio,"ensino_biblico,primeiros_socorros,saude_basica","arabe_basico,ingles",sim,medio,https://contato.exemplo/v003,A010,16,bam,Ensino Biblico em Paquistao; foco em bam,sim
+V004,Administracao em Egito,egito,rascunho,curto,administracao,"frances,portugues",nao,baixo,https://contato.exemplo/v004,A004,16,microcredito,Administracao em Egito; foco em microcredito,nao
+V005,Ti Suporte em Iraque,iraque,expirada,curto,ti_suporte,"frances,portugues",nao,baixo,https://contato.exemplo/v005,A009,15,subsistencia,Ti Suporte em Iraque; foco em subsistencia,nao
+V006,Saude Basica em Quenia,quenia,em_selecao,local,saude_basica,frances,nao,alto,https://contato.exemplo/v006,A006,9,"bam,profissionais",Saude Basica em Quenia; foco em bam,nao
+V007,Administracao em Brasil,brasil,expirada,longo,"administracao,evangelismo,saude_basica",frances,sim,baixo,https://contato.exemplo/v007,A010,8,profissionais,Administracao em Brasil; foco em profissionais,nao
+V008,Primeiros Socorros em Paquistao,paquistao,preenchida,longo,"primeiros_socorros,ti_suporte,traducao_interpretacao",ingles,nao,alto,https://contato.exemplo/v008,A010,13,"bam,profissionais",Primeiros Socorros em Paquistao; foco em bam,nao
+V009,Administracao em Paquistao,paquistao,em_selecao,curto,"administracao,evangelismo,primeiros_socorros",arabe_basico,nao,baixo,https://contato.exemplo/v009,A007,5,"cultura,medicina",Administracao em Paquistao; foco em cultura,sim
+V010,Evangelismo em Quenia,quenia,publicada,local,evangelismo,frances,nao,alto,https://contato.exemplo/v010,A010,9,cultura,Evangelismo em Quenia; foco em cultura,nao
+V011,Traducao Interpretacao em Egito,egito,expirada,longo,traducao_interpretacao,portugues,nao,alto,https://contato.exemplo/v011,A009,16,"cultura,medicina",Traducao Interpretacao em Egito; foco em cultura,nao
+V012,Ensino Biblico em Libano,libano,rascunho,curto,"ensino_biblico,logistica,ti_suporte",arabe_basico,sim,baixo,https://contato.exemplo/v012,A010,15,subsistencia,Ensino Biblico em Libano; foco em subsistencia,nao
+V013,Administracao em Paquistao,paquistao,expirada,curto,"administracao,logistica,ti_suporte","frances,ingles",sim,alto,https://contato.exemplo/v013,A006,16,"evangelismo,subsistencia",Administracao em Paquistao; foco em evangelismo,nao
+V014,Evangelismo em Jordania,jordania,rascunho,longo,"evangelismo,saude_basica,ti_suporte",arabe_basico,nao,baixo,https://contato.exemplo/v014,A006,10,"bam,cultura",Evangelismo em Jordania; foco em bam,nao
+V015,Traducao Interpretacao em Siria,siria,expirada,local,traducao_interpretacao,ingles,nao,baixo,https://contato.exemplo/v015,A002,18,"bam,cultura",Traducao Interpretacao em Siria; foco em bam,nao
+V016,Primeiros Socorros em Iraque,iraque,preenchida,local,"primeiros_socorros,ti_suporte","frances,portugues",nao,alto,https://contato.exemplo/v016,A009,20,subsistencia,Primeiros Socorros em Iraque; foco em subsistencia,nao
+V017,Ti Suporte em Jordania,jordania,em_selecao,local,ti_suporte,ingles,nao,baixo,https://contato.exemplo/v017,A010,10,bam,Ti Suporte em Jordania; foco em bam,nao
+V018,Ensino Biblico em Egito,egito,rascunho,curto,"ensino_biblico,evangelismo,logistica","ingles,portugues",nao,medio,https://contato.exemplo/v018,A002,13,"educacao,profissionais",Ensino Biblico em Egito; foco em educacao,nao
+V019,Evangelismo em Paquistao,paquistao,rascunho,local,"evangelismo,traducao_interpretacao",portugues,sim,medio,https://contato.exemplo/v019,A001,12,"bam,microcredito",Evangelismo em Paquistao; foco em bam,nao
+V020,Primeiros Socorros em Brasil,brasil,expirada,local,"primeiros_socorros,saude_basica,traducao_interpretacao",arabe_basico,sim,baixo,https://contato.exemplo/v020,A009,9,"cultura,microcredito",Primeiros Socorros em Brasil; foco em cultura,nao
