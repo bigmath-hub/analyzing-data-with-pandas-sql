@@ -25,6 +25,26 @@ def load_agencias(path='data/samples/agencias.csv') -> list: # carregar as agenc
     
     return agencia_id
 
+def load_sugestoes(path="data/outputs/sugestoes.csv") -> pd.DataFrame:
+    df = pd.read_csv(path)    
+    req = {"vaga_id","cand_id","score"}
+    faltando = req - set(df.columns)
+    assert not faltando, f"faltam chaves no arquivo sugestoes.csv: {faltando}"
+    df = df.astype({"vaga_id": 'str', "cand_id": 'str', "score": 'float64'})  
+    
+    return df       
+
+def status(rng, df):      
+    df = df.copy()
+    categorias = ["novo","em_andamento","entrevistado","aguardando_resposta","aprovado","rejeitado"]
+    pesos = [0.45, 0.25, 0.10, 0.10, 0.07, 0.03]
+    
+    status_col = rng.choices(population=categorias, weights=pesos, k=len(df))
+    df['status'] = status_col    
+    df['origem'] = 'sugestao'    
+
+    return df    
+
 def pick_one(rng, items): 
     return rng.choice(items)
 
@@ -39,9 +59,6 @@ def choose_regiao_pais(rng, tax):
     reg = pick_one(rng, tax['regioes'])
     pais = pick_one(rng, tax['paises'][reg])    
     return reg, pais
-
-
-
 
 
 def gerar_oportunidades(rng, tax, n, agencias_id):
@@ -166,6 +183,29 @@ rng.randint(1, 3)
 if __name__ == "__main__":  
     rng = Random(42)
     tax = load_taxonomias()
+    ids = load_agencias()
+
+    df_o = gerar_oportunidades(rng, tax, 20, ids)
+    
+    vagas_validas = [
+        vaga for vaga in df_o["status"] if (vaga == 'publicada' or vaga == 'em_selecao')
+    ]
+
+    df_c = gerar_candidatos(rng, tax, 60)
+    sugestoes = load_sugestoes()
+    df_sug = status(rng, sugestoes)    
+    print(len(vagas_validas), len(df_c), df_sug.shape)  
+
+    pares_existentes = set(zip(df_sug["vaga_id"], df_sug["cand_id"]))
+    N_esp = round(len(df_sug) * 0.30)
+    print(pares_existentes, N_esp)
+    
+    
+
+
+
+    """rng = Random(42)
+    tax = load_taxonomias()
     
     ids = load_agencias()
     print("N_AGENCIAS_ATIVAS:", len(ids))
@@ -176,8 +216,11 @@ if __name__ == "__main__":
 
     df_o = gerar_oportunidades(rng, tax, 20, ids)
     print(df_o.head(3))
-    print(df_o["status"].value_counts())
-    
+
+    vagas_validas = [
+        vaga for vaga in df_o["status"] if (vaga == 'publicada' or vaga == 'em_selecao')
+    ]
+           
     
     print('\n======================================================\n')
 
@@ -192,3 +235,14 @@ if __name__ == "__main__":
     print("N_AGENCIAS_ATIVAS:", len(ids))
     print("PRIMEIRAS_3:", ids[:3])
 
+    sugestoes = load_sugestoes()
+    print(sugestoes.shape)
+    print(sugestoes.head(3))
+
+    df_sug = status(rng, sugestoes)
+    print(df_sug.shape)
+    print(df_sug[['vaga_id','cand_id','score','origem','status']].head(5))
+    print(df_sug['status'].value_counts())
+    print(df_sug["status"].value_counts(normalize=True).round(3))
+
+"""

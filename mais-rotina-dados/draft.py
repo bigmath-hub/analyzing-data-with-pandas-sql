@@ -1,3 +1,4 @@
+from random import Random
 """
 oportunidades = {
     'id': 'name0',
@@ -196,3 +197,25 @@ print(to_set("  ingles ,  arabe_basico ,,  "))  # {'ingles', 'arabe_basico'}
 print(to_set(None))                      # set()
 """
 
+rng = Random(42)
+
+choices = ['head', 'tail']
+probabilidades = [0.50, 0.50]
+
+design = {
+        'novo': 0.45, 
+        'em_andamento': 0.25, 
+        'entrevistado': 0.10,
+        'aguardando_resposta': 0.10,
+        'aprovado': 0.07,
+        'rejeitado': 0.03
+    }
+
+#print(list(design.keys()))
+
+
+for _ in range(10):
+    print(rng.choices(population=list(design.keys()), weights=design.values(), k=1)[0])
+        
+            
+            
