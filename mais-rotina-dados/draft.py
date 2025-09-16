@@ -1,4 +1,5 @@
 from random import Random
+import pandas as pd
 """
 oportunidades = {
     'id': 'name0',
@@ -213,9 +214,33 @@ design = {
 
 #print(list(design.keys()))
 
+vagas_total = {
+    'id': ['v001', 'v002', 'v003', 'v004', 'v005', 'v006', 'v007', 'v008', 'v009'],
+    'status': [
+        'em_selecao', 
+        'publicada', 
+        'preenchida', 
+        'publicada', 
+        'preenchida', 
+        'preenchida', 
+        'publicada', 
+        'publicada', 
+        'em_selecao'
+    ]
+}
+    
+df_v = pd.DataFrame(vagas_total)
 
-for _ in range(10):
-    print(rng.choices(population=list(design.keys()), weights=design.values(), k=1)[0])
+status_list = ['preenchida', 'em_selecao']
+mask = df_v['status'].isin(status_list)
+df_pp = df_v.loc[mask, ['id', 'status']]
+
+choices = df_pp['id'].tolist()
+
+
+print(rng.choice(choices))
+
+
         
             
             

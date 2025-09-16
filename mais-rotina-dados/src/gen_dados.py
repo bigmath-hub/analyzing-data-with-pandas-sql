@@ -174,6 +174,39 @@ def gerar_candidatos(rng, tax, n):
 
     return pd.DataFrame(candidatos)[COLS]
 
+def sortear_par_unico(rng, vagas_validas_df, candidatos_df, pares_existentes) -> tuple[str,str]:   
+    
+    choices_o = vagas_validas_df["id"].astype(str).str.strip().tolist()
+    choices_c = candidatos_df["id"].astype(str).str.strip().tolist()
+    max_tentativas = 50
+    tentativas = 0
+
+    try:
+        while tentativas < max_tentativas:   
+            
+            vaga_id = rng.choice(choices_o) # 1 vaga id em vagas_validas_df
+            cand_id = rng.choice(choices_c) # 1 candidato em candidatos_df
+
+            if (vaga_id, cand_id) in pares_existentes: # se (vaga_id, cand_id) em pares existentes, repetir.
+                tentativas += 1
+            else:
+                return (vaga_id, cand_id)                      
+
+    except:
+        raise RuntimeError("limite de tentativas atingido")
+
+def sortear_pares_novos(rng, vagas_validas_df, candidatos_df, pares_existentes, n) -> set[tuple[str,str]]:
+    usados = set(pares_existentes)   
+    resultado = set()
+    n = int(n)
+    
+    while len(resultado) < n:
+            par = sortear_par_unico(rng, vagas_validas_df, candidatos_df, usados)
+            resultado.add(par)
+            usados.add(par)    
+    
+    return resultado    
+        
 '''
 rng.choice(items)
 rng.sample(items, 2)
@@ -185,20 +218,36 @@ if __name__ == "__main__":
     tax = load_taxonomias()
     ids = load_agencias()
 
-    df_o = gerar_oportunidades(rng, tax, 20, ids)
+    df_o = gerar_oportunidades(rng, tax, 20, ids)    
     
-    vagas_validas = [
-        vaga for vaga in df_o["status"] if (vaga == 'publicada' or vaga == 'em_selecao')
-    ]
-
+    
+    df_vv = df_o.loc[
+        df_o['status'].isin(['publicada', 'em_selecao']), ['id', 'status']
+    ]    
+    
     df_c = gerar_candidatos(rng, tax, 60)
+    
     sugestoes = load_sugestoes()
     df_sug = status(rng, sugestoes)    
-    print(len(vagas_validas), len(df_c), df_sug.shape)  
+    print(len(df_vv), len(df_c), df_sug.shape)  
 
     pares_existentes = set(zip(df_sug["vaga_id"], df_sug["cand_id"]))
     N_esp = round(len(df_sug) * 0.30)
-    print(pares_existentes, N_esp)
+    print(pares_existentes, N_esp)    
+    
+    print()
+
+    novos = sortear_pares_novos(rng, df_vv, df_c, pares_existentes, N_esp)
+    print("pares_novos:", novos)
+    conflitos = sum(1 for p in novos if p in pares_existentes)
+    print("conflitos_com_existentes:", conflitos)  # deve ser 0
+    print("qtd_novos:", len(novos), "esperado:", N_esp)  # aqui deve ser 1
+
+
+    
+
+    
+
     
     
 
