@@ -12,7 +12,7 @@ def load_taxonomias(path='config/taxonomias.yml'): # carregar as taxonomias
     req = {"objetivos","idiomas","habilidades","regioes","paises","tipos","status","risco_nivel","urgente"}
     faltando = req - set(tax)    
     #print(bool(faltando)) # debug
-    assert not faltando, f"faltam chaves no YAML: {faltando}"
+    assert not faltando, f"faltam chaves no YAML: {rng.choice}"
     return tax
 
 def load_agencias(path='data/samples/agencias.csv') -> list: # carregar as agencias
@@ -23,27 +23,7 @@ def load_agencias(path='data/samples/agencias.csv') -> list: # carregar as agenc
         if status == 'ativa':
             agencia_id.append(str(id.agencia_id).strip())        
     
-    return agencia_id
-
-def load_sugestoes(path="data/outputs/sugestoes.csv") -> pd.DataFrame:
-    df = pd.read_csv(path)    
-    req = {"vaga_id","cand_id","score"}
-    faltando = req - set(df.columns)
-    assert not faltando, f"faltam chaves no arquivo sugestoes.csv: {faltando}"
-    df = df.astype({"vaga_id": 'str', "cand_id": 'str', "score": 'float64'})  
-    
-    return df       
-
-def status(rng, df):      
-    df = df.copy()
-    categorias = ["novo","em_andamento","entrevistado","aguardando_resposta","aprovado","rejeitado"]
-    pesos = [0.45, 0.25, 0.10, 0.10, 0.07, 0.03]
-    
-    status_col = rng.choices(population=categorias, weights=pesos, k=len(df))
-    df['status'] = status_col    
-    df['origem'] = 'sugestao'    
-
-    return df    
+    return agencia_id    
 
 def pick_one(rng, items): 
     return rng.choice(items)
@@ -66,7 +46,10 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
     retornar um DF    
     """    
     registros = []
-    
+
+    if not agencias_id:
+        raise ValueError("Lista de agencias_id está vazia. Verifique data/samples/agencias.csv.")
+
     for i in range(1, n+1):
         _, pais = choose_regiao_pais(rng, tax)
         id_ = f'V{i:03d}'
@@ -76,17 +59,18 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
         idiomas_requeridos = pick_many(rng, tax['idiomas'], 1, 2)
         pna = "sim" if rng.random() < 0.30 else "nao"    
         risco_nivel = pick_one(rng, tax['risco_nivel'])
-        hab0 = habilidades_requeridas.split(",")[0]        
-        titulo = f"{hab0.replace('_', ' ').title()} em {pais.title()}"
+        hab0_slug = habilidades_requeridas.split(",")[0]
+        hab0 = hab0_slug.replace("_", " ").title()
+        titulo = f"{hab0} em {pais.title()}"
         contato_url = f"https://contato.exemplo/{id_.lower()}"        
         agencia = rng.choice(agencias_id)
-        vagas_total = rng.choice([x for x in range(5, 21)])
-        objetivos = pick_many(rng, tax['objetivos'], 1, 2)        
-        descricao_curta = f"{hab0.replace('_', ' ').title()} em {pais.title()}; foco em {objetivos.split(",")[0]}"
+        vagas_total = rng.randint(5, 20)
+        objetivos_csv = pick_many(rng, tax["objetivos"], 1, 2)
+        objetivo0 = objetivos_csv.split(",")[0].replace("_", " ")
+        descricao_curta = f"{hab0} em {pais.title()}; foco em {objetivo0}"
         choices = tax['urgente']
         probabilities = [0.20, 0.80]        
         urgente = rng.choices(population=choices, weights=probabilities, k=1)[0]
-
 
         linha = {
             "id": id_,
@@ -101,9 +85,9 @@ def gerar_oportunidades(rng, tax, n, agencias_id):
             "contato_url": contato_url,
             "agencia_id": agencia,
             "vagas_total": vagas_total,
-            "objetivos": objetivos,
+            "objetivos": objetivos_csv,
             "descricao_curta": descricao_curta,
-            "urgente": urgente
+            "urgente": urgente,
         }
         registros.append(linha)        
 
@@ -173,39 +157,7 @@ def gerar_candidatos(rng, tax, n):
     ]
 
     return pd.DataFrame(candidatos)[COLS]
-
-def sortear_par_unico(rng, vagas_validas_df, candidatos_df, pares_existentes) -> tuple[str,str]:   
     
-    choices_o = vagas_validas_df["id"].astype(str).str.strip().tolist()
-    choices_c = candidatos_df["id"].astype(str).str.strip().tolist()
-    max_tentativas = 50
-    tentativas = 0
-
-    try:
-        while tentativas < max_tentativas:   
-            
-            vaga_id = rng.choice(choices_o) # 1 vaga id em vagas_validas_df
-            cand_id = rng.choice(choices_c) # 1 candidato em candidatos_df
-
-            if (vaga_id, cand_id) in pares_existentes: # se (vaga_id, cand_id) em pares existentes, repetir.
-                tentativas += 1
-            else:
-                return (vaga_id, cand_id)                      
-
-    except:
-        raise RuntimeError("limite de tentativas atingido")
-
-def sortear_pares_novos(rng, vagas_validas_df, candidatos_df, pares_existentes, n) -> set[tuple[str,str]]:
-    usados = set(pares_existentes)   
-    resultado = set()
-    n = int(n)
-    
-    while len(resultado) < n:
-            par = sortear_par_unico(rng, vagas_validas_df, candidatos_df, usados)
-            resultado.add(par)
-            usados.add(par)    
-    
-    return resultado    
         
 '''
 rng.choice(items)
@@ -213,85 +165,19 @@ rng.sample(items, 2)
 rng.randint(1, 3)
 '''
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     rng = Random(42)
+
     tax = load_taxonomias()
-    ids = load_agencias()
+    agencias = load_agencias()
 
-    df_o = gerar_oportunidades(rng, tax, 20, ids)    
-    
-    
-    df_vv = df_o.loc[
-        df_o['status'].isin(['publicada', 'em_selecao']), ['id', 'status']
-    ]    
-    
-    df_c = gerar_candidatos(rng, tax, 60)
-    
-    sugestoes = load_sugestoes()
-    df_sug = status(rng, sugestoes)    
-    print(len(df_vv), len(df_c), df_sug.shape)  
-
-    pares_existentes = set(zip(df_sug["vaga_id"], df_sug["cand_id"]))
-    N_esp = round(len(df_sug) * 0.30)
-    print(pares_existentes, N_esp)    
-    
-    print()
-
-    novos = sortear_pares_novos(rng, df_vv, df_c, pares_existentes, N_esp)
-    print("pares_novos:", novos)
-    conflitos = sum(1 for p in novos if p in pares_existentes)
-    print("conflitos_com_existentes:", conflitos)  # deve ser 0
-    print("qtd_novos:", len(novos), "esperado:", N_esp)  # aqui deve ser 1
-
-
-    
-
-    
-
-    
-    
-
-
-
-    """rng = Random(42)
-    tax = load_taxonomias()
-    
-    ids = load_agencias()
-    print("N_AGENCIAS_ATIVAS:", len(ids))
-    print("PRIMEIRAS_3:", ids[:3])    
-    
-    print('\n======================================================\n')
-
-
-    df_o = gerar_oportunidades(rng, tax, 20, ids)
-    print(df_o.head(3))
-
-    vagas_validas = [
-        vaga for vaga in df_o["status"] if (vaga == 'publicada' or vaga == 'em_selecao')
-    ]
-           
-    
-    print('\n======================================================\n')
-
-    df_c = gerar_candidatos(rng, tax, 60)
-    print(df_c.head(3))
-    print(df_c["tipo"].value_counts())
+    df_o = gerar_oportunidades(rng, tax, n=20, agencias_id=agencias)
+    df_c = gerar_candidatos(rng, tax, n=60)
 
     df_o.to_csv("data/samples/oportunidades.csv", index=False)
     df_c.to_csv("data/samples/candidatos.csv", index=False)
-    
-    ids = load_agencias()
-    print("N_AGENCIAS_ATIVAS:", len(ids))
-    print("PRIMEIRAS_3:", ids[:3])
 
-    sugestoes = load_sugestoes()
-    print(sugestoes.shape)
-    print(sugestoes.head(3))
-
-    df_sug = status(rng, sugestoes)
-    print(df_sug.shape)
-    print(df_sug[['vaga_id','cand_id','score','origem','status']].head(5))
-    print(df_sug['status'].value_counts())
-    print(df_sug["status"].value_counts(normalize=True).round(3))
-
-"""
+    # feedback rápido no console
+    print(f"Oportunidades: {len(df_o)}  |  Candidatos: {len(df_c)}")
+    print("Status das vagas:")
+    print(df_o["status"].value_counts())
