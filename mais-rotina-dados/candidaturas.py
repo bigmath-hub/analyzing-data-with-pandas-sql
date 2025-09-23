@@ -1,6 +1,9 @@
 from pathlib import Path
 import pandas as pd
 from random import Random     
+from src.matching import load_cfg
+#from src.gen_dados import load_taxonomias
+                            
 
 def sortear_par_unico(rng, vagas_validas_df, candidatos_df, pares_existentes) -> tuple[str,str]:   
     
@@ -82,9 +85,19 @@ def preparar_base(rng: Random):
 
     return df_o, df_c, vagas_validas, df_sug, pares_existentes, N_esp
 
+def carregar_ctx_matching():
+    cfg = load_cfg("config/padroes.yml")
+    tax = load_taxonomias()
+    
+    return (cfg, tax)
+
 def main():
     rng = Random(42)
     df_o, df_c, vagas_validas, df_sug, pares_existentes, N_esp = preparar_base(rng)
+    cfg, tax = carregar_ctx_matching()
+
+    print("CFG_PESOS:", cfg['matching']['pesos'])
+    print("TAX_KEYS:", sorted(tax.keys())[:5], '...')
 
     # Micro-passo já feito: sortear 30% de pares novos
     pares_novos = sortear_pares_novos(rng, vagas_validas, df_c, pares_existentes, N_esp)
