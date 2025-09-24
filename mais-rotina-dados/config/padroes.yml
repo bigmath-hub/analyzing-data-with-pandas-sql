@@ -6,4 +6,4 @@ matching:
     bonus: 0.05
   threshold_padrao: 80
   must_have:
-    idiomas: [ingles]
+    idiomas: [] # vazio para MVP

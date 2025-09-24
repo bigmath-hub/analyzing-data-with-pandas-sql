@@ -1,0 +1,8 @@
+vaga_id,cand_id,score,origem,status
+V001,C027,95.0,sugestao,em_andamento
+V001,C049,95.0,sugestao,novo
+V006,C008,95.0,sugestao,novo
+V010,C006,75.0,sorteio,novo
+V010,C057,97.5,sugestao,novo
+V017,C036,95.0,sugestao,entrevistado
+V017,C057,95.0,sugestao,em_andamento

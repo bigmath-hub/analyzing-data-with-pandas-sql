@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 import yaml
-from gen_dados import load_taxonomias
+from .gen_dados import load_taxonomias
 
 def main():
     cfg = load_cfg("config/padroes.yml")

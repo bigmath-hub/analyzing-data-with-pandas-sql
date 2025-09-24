@@ -1,8 +1,10 @@
+from src.matching import load_cfg, score_pair
+from src.gen_dados import load_taxonomias
+
 from pathlib import Path
 import pandas as pd
 from random import Random     
-from src.matching import load_cfg
-#from src.gen_dados import load_taxonomias
+
                             
 
 def sortear_par_unico(rng, vagas_validas_df, candidatos_df, pares_existentes) -> tuple[str,str]:   
@@ -91,13 +93,42 @@ def carregar_ctx_matching():
     
     return (cfg, tax)
 
+def get_row_by_id(df: pd.DataFrame, id_col: str, id_val: str) -> pd.Series:
+    return df.loc[df[id_col] == id_val].iloc[0]
+
+def pontuar_pares(pares, df_o, df_c, cfg, tax) -> pd.DataFrame:
+    regs = []
+    
+    for vaga_id, cand_id in pares:
+        vaga_row = get_row_by_id(df_o, "id", vaga_id)
+        cand_row = get_row_by_id(df_c, "id", cand_id)
+        s = score_pair(vaga_row, cand_row, cfg, tax)
+        regs.append({"vaga_id": vaga_id, "cand_id": cand_id, "score": s})
+    
+    return pd.DataFrame(regs)
+
+def consolidar_candidaturas(df_sug: pd.DataFrame, df_novos: pd.DataFrame) -> pd.DataFrame:
+    cols = ["vaga_id", "cand_id", "score", "origem", "status"]
+    base = pd.concat([df_sug[cols].copy(), df_novos[cols].copy()], ignore_index=True)
+
+    base["vaga_id"] = base["vaga_id"].astype("string")
+    base["cand_id"] = base["cand_id"].astype("string")
+    base["score"] = base["score"].astype(float)
+
+    base = base.sort_values(["vaga_id", "cand_id", "score"], ascending=[True, True, False])
+    base = base.drop_duplicates(subset=["vaga_id", "cand_id"], keep="first")
+
+    return base
+
+
+
 def main():
     rng = Random(42)
     df_o, df_c, vagas_validas, df_sug, pares_existentes, N_esp = preparar_base(rng)
     cfg, tax = carregar_ctx_matching()
 
     print("CFG_PESOS:", cfg['matching']['pesos'])
-    print("TAX_KEYS:", sorted(tax.keys())[:5], '...')
+    print("TAX_KEYS:", sorted(tax.keys())[:5], "...")
 
     # Micro-passo já feito: sortear 30% de pares novos
     pares_novos = sortear_pares_novos(rng, vagas_validas, df_c, pares_existentes, N_esp)
@@ -106,8 +137,37 @@ def main():
     print("conflitos_com_existentes:", conflitos)   # deve ser 0
     print("qtd_novos:", len(pares_novos), "esperado:", N_esp)
 
-    # 👉 Próximo micro-passo (3A/3B): calcular score dos pares_novos e filtrar < 20.
-    # Faremos isso aqui depois que você rodar e me mandar a saída acima.
+    df_pontuados = pontuar_pares(pares_novos, df_o, df_c, cfg, tax)
+    print("amostra - pontuados:")
+    print(df_pontuados.head())
+
+    TH_SCORE = 20
+    df_pontuados = df_pontuados[df_pontuados["score"] >= TH_SCORE].copy()
+    df_pontuados["origem"] = "sorteio"
+    df_pontuados["status"] = "novo"
+
+    print("apos filtro >= 20")
+    print(df_pontuados)  
+
+    df_final = consolidar_candidaturas(df_sug, df_pontuados)
+    print("\namostra - consolidado")
+    print(df_final.head())
+
+    out_path = "data/outputs/candidaturas.csv"
+    df_final.to_csv(out_path, index=False)
+    print(f"\narquivo salvo em {out_path}")
+
+    print("\nResumo:")
+    print("-------")
+    print("linhas totais:", len(df_final))
+    print("por origem:\n", df_final["origem"].value_counts())
+    print("\nTop 5 por score:")
+    print(df_final.sort_values("score", ascending=False).head(5))
+
+    vagas_cobertas = df_final["vaga_id"].nunique()
+    total_vagas_validas = vagas_validas["id"].nunique()
+    print(f"\nVagas cobertas: {vagas_cobertas} de {total_vagas_validas}")
+
 
 if __name__ == "__main__":
     main()
