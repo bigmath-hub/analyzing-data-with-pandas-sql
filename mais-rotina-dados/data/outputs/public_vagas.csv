@@ -1,0 +1,21 @@
+vaga_id,titulo,pais,agencia_id,status,urgente,vagas_total,cands_sugestao,cands_sorteio,cands_total,top1_cand_id,top1_score
+V001,Discipulado em Jordania,jordania,A001,em_selecao,nao,7,2,0,2,C027,95.0
+V002,Ti Suporte em Iraque,iraque,A004,expirada,sim,9,0,0,0,,
+V003,Ensino Biblico em Paquistao,paquistao,A010,em_selecao,sim,16,0,0,0,,
+V004,Administracao em Egito,egito,A004,rascunho,nao,16,0,0,0,,
+V005,Ti Suporte em Iraque,iraque,A009,expirada,nao,15,0,0,0,,
+V006,Saude Basica em Quenia,quenia,A006,em_selecao,nao,9,1,0,1,C008,95.0
+V007,Administracao em Brasil,brasil,A010,expirada,nao,8,0,0,0,,
+V008,Primeiros Socorros em Paquistao,paquistao,A010,preenchida,nao,13,0,0,0,,
+V009,Administracao em Paquistao,paquistao,A007,em_selecao,sim,5,0,0,0,,
+V010,Evangelismo em Quenia,quenia,A010,publicada,nao,9,1,1,2,C057,97.5
+V011,Traducao Interpretacao em Egito,egito,A009,expirada,nao,16,0,0,0,,
+V012,Ensino Biblico em Libano,libano,A010,rascunho,nao,15,0,0,0,,
+V013,Administracao em Paquistao,paquistao,A006,expirada,nao,16,0,0,0,,
+V014,Evangelismo em Jordania,jordania,A006,rascunho,nao,10,0,0,0,,
+V015,Traducao Interpretacao em Siria,siria,A002,expirada,nao,18,0,0,0,,
+V016,Primeiros Socorros em Iraque,iraque,A009,preenchida,nao,20,0,0,0,,
+V017,Ti Suporte em Jordania,jordania,A010,em_selecao,nao,10,2,0,2,C036,95.0
+V018,Ensino Biblico em Egito,egito,A002,rascunho,nao,13,0,0,0,,
+V019,Evangelismo em Paquistao,paquistao,A001,rascunho,nao,12,0,0,0,,
+V020,Primeiros Socorros em Brasil,brasil,A009,expirada,nao,9,0,0,0,,

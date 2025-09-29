@@ -4,13 +4,14 @@ def public_vagas(path_o="data/samples/oportunidades.csv", path_c="data/outputs/c
     
 
     df_o = pd.read_csv(path_o, dtype={"id": "string", "status": "string", "agencia_id": "string"})
-    df_c = pd.read_csv(path_c, dtype={"vaga_id": "string", "cand_id": "string", "score": float})    
-    cont_cand = df_c.groupby('vaga_id')['origem'].value_counts().unstack().fillna(0).astype(int)
-    cont_cand = cont_cand.reindex(columns=["sugestao","sorteio"], fill_value=0) # edge case - by chatGPT
+    df_c = pd.read_csv(path_c, dtype={"vaga_id": "string", "cand_id": "string", "score": float})        
+    cont_cand = df_c.groupby('vaga_id')['origem'].value_counts().unstack().reindex(columns=["sugestao","sorteio"], fill_value=0)
+    print(cont_cand)  
     melhores_linhas = df_c.loc[df_c.groupby('vaga_id')['score'].idxmax()]
-    top1_cand = melhores_linhas.set_index('vaga_id')[['cand_id', 'score']]    
-    #df_merged = pd.merge(top1_cand, df_o, how='left', left_on='vaga_id', right_on='id')
+    top1_cand = melhores_linhas.set_index('vaga_id')[['cand_id', 'score']]        
+
     df_merge1 = pd.merge(df_o, cont_cand, how='left', left_on='id', right_index=True)
+    df_merge1[['sugestao', 'sorteio']] = df_merge1[['sugestao', 'sorteio']].fillna(0).astype(int)
     df = pd.merge(df_merge1, top1_cand, how='left', left_on='id', right_index=True)
     df['cands_total'] = df['sugestao'] + df['sorteio']
 
@@ -30,14 +31,45 @@ def public_vagas(path_o="data/samples/oportunidades.csv", path_c="data/outputs/c
         'top1_cand_id', 'top1_score'
     ]
 
-    df_final = df[colunas_finais]   
+    df_final = df[colunas_finais]
 
     return df_final  
+
+def public_candidatos(
+        p_candidatos="data/samples/candidatos.csv", 
+        p_candidaturas="data/outputs/candidaturas.csv", 
+        p_opotunidades="data/samples/oportunidades.csv"
+) -> pd.DataFrame:
+    
+    df_candidatos = pd.read_csv(p_candidaturas, dtype={
+        "vaga_id": "string", "cand_id": "string", "score": float, "origem": "string", "status": "string"
+    })
+       
+    contagem_origem = (
+        df_candidatos.groupby("cand_id")['origem']
+        .value_counts()
+        .unstack()
+        .reindex(columns=['sugestao', 'sorteio'],fill_value=0)
+        .fillna(0).astype(int) # limpar na origem dessa vez
+    )
+    
+
+    
+
+    
+
     
 
 
 def main():
-    df = public_vagas()
+
+    public_candidatos()   
+    
+
+
+
+
+    """df = public_vagas()
     print(f"Number of rows df: {len(df)}")    
     df_o = pd.read_csv("data/samples/oportunidades.csv")
     print(f"Number of rows oportunidades.csv: {len(df_o)}")    
@@ -51,9 +83,10 @@ def main():
 
     print("top1_score_max:", top1_score_max)    
     print("top1_score_min:", top1_score_min)
-    
-    
-    
 
+    outp = "data/outputs/public_vagas.csv"
+    df.to_csv(outp, index=False)
+    print("salvo em:", outp)      
+"""
 if __name__ == "__main__":
     main()
