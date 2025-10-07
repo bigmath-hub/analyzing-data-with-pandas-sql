@@ -52,69 +52,84 @@ def public_candidatos(
         "vaga_id": "string", "cand_id": "string", "score": float, "origem": "string", "status": "string"
     })
 
-    df_candidatos = pd.read_csv(p_candidatos, dtype="string")
+    df_candidatos = pd.read_csv(p_candidatos, dtype="string") # linha inutil?
     df_oportunidades = pd.read_csv(p_oportunidades, dtype="string")
     
     
+    # contagem por origem e totais
     contagem_origem = (
         df_candidaturas.groupby("cand_id")['origem']
         .value_counts()
         .unstack()
         .reindex(columns=['sugestao', 'sorteio'],fill_value=0)
         .fillna(0).astype(int) # limpar na origem dessa vez
+    )        
+    contagem_origem['total_vagas'] = contagem_origem.sum(axis=1)    
+    
+    
+    # informacoes da melhor vaga
+    melhores_linhas = df_candidaturas.iloc[df_candidaturas.groupby('cand_id')['score'].idxmax()]        
+    cols_interesse = ['cand_id', 'vaga_id', 'score', ] # limpar o df para manter as colunas que me interessam
+    df_intermediario = melhores_linhas[cols_interesse]    
+    df_titulo = pd.merge(df_intermediario, df_oportunidades, left_on='vaga_id', right_on='id') # merge       
+    cols_finais = ['cand_id', 'score', 'vaga_id', 'titulo'] 
+    top_vaga_info = df_titulo[cols_finais] # construir o df top_vagas_info
+    
+
+    df_final = df_candidatos    
+    # left merge - trazer as contagens
+    df_final = pd.merge(
+        df_final,
+        contagem_origem,
+        how='left',
+        left_on='id',
+        right_index=True
+    )
+
+    # left merge - trazer informacoes top vaga
+    df_final = pd.merge(
+        df_final,
+        top_vaga_info,
+        how='left',
+        left_on='id',
+        right_on='cand_id'
     )    
-        
-    contagem_origem['total_vagas'] = contagem_origem.sum(axis=1) 
-    print(contagem_origem)
-    
-    melhores_linhas = df_candidaturas.iloc[df_candidaturas.groupby('vaga_id')['score'].idxmax()]
-    print(melhores_linhas)
-    
-    df_intermediario = melhores_linhas.drop(['cand_id', 'status', 'origem'], axis=1) 
-    
-    #df_merge = pd.merge(df_oportunidades, df_intermediario, how='left', left_on='id', right_index=True)
     
     
+    df_final = df_final.drop('cand_id', axis=1)
+
+    # limpeza final    
+    colunas_int = ['sugestao', 'sorteio', 'total_vagas']
+    df_final[colunas_int] = df_final[colunas_int].fillna(0).astype(int)
+    df_final['score'] = df_final['score'].fillna(0.0).astype(float)
+    colunas_texto = ['vaga_id', 'titulo']
+    df_final[colunas_texto] = df_final[colunas_texto].fillna('').astype('string')    
+
+    colunas_renomear = {
+    'id': 'cand_id',
+    'sugestao': 'total_sugestao',
+    'sorteio': 'total_sorteio',
+    'vaga_id': 'top_vaga_id',
+    'titulo': 'top_vaga_titulo',
+    'score': 'top_score'
+    }
+
+    df_final = df_final.rename(columns=colunas_renomear)
     
-    
+    colunas_finais = [
+    'cand_id', 'nome', 'idiomas', 'regioes_preferidas', 'tipo',
+    'total_vagas',
+    'total_sugestao', 'total_sorteio',
+    'top_vaga_id', 'top_vaga_titulo', 'top_score'
+    ]   
 
-    
-
-    
-
-    
-
-    
-
-    
-
-
-def main():
-
-    
-    public_candidatos()   
+    return df_final[colunas_finais]
 
 
 
+def main():    
+    print(public_candidatos())
 
-    """df = public_vagas()
-    print(f"Number of rows df: {len(df)}")    
-    df_o = pd.read_csv("data/samples/oportunidades.csv")
-    print(f"Number of rows oportunidades.csv: {len(df_o)}")    
-    check_sum = (df['cands_total'] == (df['cands_sugestao'] + df['cands_sorteio'])).all()
-    print(f"A soma de cands_total está correta em todas as linhas? {check_sum}")
-    len_cands_total = len(df[df['cands_total'] > 0])
-    top1_score_max = df[df['top1_score'] > 0]['top1_score'].max()
-    top1_score_min = df[df['top1_score'] > 0]['top1_score'].min()
-    
-    print("cands_total:", len_cands_total)
 
-    print("top1_score_max:", top1_score_max)    
-    print("top1_score_min:", top1_score_min)
-
-    outp = "data/outputs/public_vagas.csv"
-    df.to_csv(outp, index=False)
-    print("salvo em:", outp)      
-"""
 if __name__ == "__main__":
     main()
