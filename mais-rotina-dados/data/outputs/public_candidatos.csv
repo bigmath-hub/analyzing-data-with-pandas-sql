@@ -1,0 +1,61 @@
+cand_id,nome,idiomas,regioes_preferidas,tipo,total_sugestao,total_sorteio,inscricoes_total,top_vaga_id,top_vaga_titulo,top_score
+C001,Cand_001,"ingles,portugues",asia_sul,medio,0,0,0,,,0.0
+C002,Cand_002,frances,"america_sul,mena",local,0,0,0,,,0.0
+C003,Cand_003,portugues,asia_sul,curto,0,0,0,,,0.0
+C004,Cand_004,arabe_basico,africa_este,longo,0,0,0,,,0.0
+C005,Cand_005,frances,africa_norte,medio,0,0,0,,,0.0
+C006,Cand_006,frances,asia_sul,curto,0,1,1,V010,Evangelismo em Quenia,75.0
+C007,Cand_007,ingles,asia_sul,medio,0,0,0,,,0.0
+C008,Cand_008,"frances,ingles","africa_este,africa_norte",local,1,0,1,V006,Saude Basica em Quenia,95.0
+C009,Cand_009,frances,africa_este,local,0,0,0,,,0.0
+C010,Cand_010,portugues,"africa_este,mena",medio,0,0,0,,,0.0
+C011,Cand_011,"frances,portugues",america_sul,medio,0,0,0,,,0.0
+C012,Cand_012,"arabe_basico,portugues","africa_norte,asia_sul",longo,0,0,0,,,0.0
+C013,Cand_013,"frances,ingles","africa_norte,america_sul",curto,0,0,0,,,0.0
+C014,Cand_014,"arabe_basico,portugues","america_sul,asia_sul",curto,0,0,0,,,0.0
+C015,Cand_015,arabe_basico,"africa_norte,mena",local,0,0,0,,,0.0
+C016,Cand_016,"frances,portugues","africa_norte,asia_sul",longo,0,0,0,,,0.0
+C017,Cand_017,portugues,"africa_este,mena",curto,0,0,0,,,0.0
+C018,Cand_018,frances,africa_norte,local,0,0,0,,,0.0
+C019,Cand_019,frances,"america_sul,mena",longo,0,0,0,,,0.0
+C020,Cand_020,frances,africa_este,longo,0,0,0,,,0.0
+C021,Cand_021,"arabe_basico,portugues",asia_sul,local,0,0,0,,,0.0
+C022,Cand_022,"arabe_basico,frances",asia_sul,medio,0,0,0,,,0.0
+C023,Cand_023,frances,america_sul,local,0,0,0,,,0.0
+C024,Cand_024,arabe_basico,mena,curto,0,0,0,,,0.0
+C025,Cand_025,"arabe_basico,portugues",america_sul,local,0,0,0,,,0.0
+C026,Cand_026,"arabe_basico,frances",mena,curto,0,0,0,,,0.0
+C027,Cand_027,"ingles,portugues","asia_sul,mena",longo,1,0,1,V001,Discipulado em Jordania,95.0
+C028,Cand_028,portugues,"america_sul,asia_sul",medio,0,0,0,,,0.0
+C029,Cand_029,"arabe_basico,frances","africa_este,mena",longo,0,0,0,,,0.0
+C030,Cand_030,"arabe_basico,portugues","america_sul,mena",curto,0,0,0,,,0.0
+C031,Cand_031,"arabe_basico,frances",mena,medio,0,0,0,,,0.0
+C032,Cand_032,"frances,portugues","africa_este,asia_sul",medio,0,0,0,,,0.0
+C033,Cand_033,arabe_basico,asia_sul,medio,0,0,0,,,0.0
+C034,Cand_034,portugues,africa_este,curto,0,0,0,,,0.0
+C035,Cand_035,ingles,"africa_norte,asia_sul",local,0,0,0,,,0.0
+C036,Cand_036,"arabe_basico,ingles","asia_sul,mena",local,1,0,1,V017,Ti Suporte em Jordania,95.0
+C037,Cand_037,"frances,ingles",america_sul,longo,0,0,0,,,0.0
+C038,Cand_038,"arabe_basico,frances","america_sul,asia_sul",medio,0,0,0,,,0.0
+C039,Cand_039,portugues,africa_norte,curto,0,0,0,,,0.0
+C040,Cand_040,"arabe_basico,frances",africa_norte,medio,0,0,0,,,0.0
+C041,Cand_041,"arabe_basico,frances",america_sul,curto,0,0,0,,,0.0
+C042,Cand_042,arabe_basico,"africa_este,america_sul",longo,0,0,0,,,0.0
+C043,Cand_043,"frances,ingles",asia_sul,medio,0,0,0,,,0.0
+C044,Cand_044,"frances,ingles","america_sul,asia_sul",medio,0,0,0,,,0.0
+C045,Cand_045,"arabe_basico,frances","africa_norte,mena",medio,0,0,0,,,0.0
+C046,Cand_046,portugues,"africa_este,mena",longo,0,0,0,,,0.0
+C047,Cand_047,"frances,ingles",america_sul,medio,0,0,0,,,0.0
+C048,Cand_048,"arabe_basico,frances","asia_sul,mena",local,0,0,0,,,0.0
+C049,Cand_049,"ingles,portugues","africa_norte,mena",local,1,0,1,V001,Discipulado em Jordania,95.0
+C050,Cand_050,"arabe_basico,portugues","africa_norte,asia_sul",longo,0,0,0,,,0.0
+C051,Cand_051,portugues,"africa_este,america_sul",local,0,0,0,,,0.0
+C052,Cand_052,"arabe_basico,portugues","africa_este,asia_sul",curto,0,0,0,,,0.0
+C053,Cand_053,portugues,"america_sul,asia_sul",curto,0,0,0,,,0.0
+C054,Cand_054,"ingles,portugues","africa_norte,mena",longo,0,0,0,,,0.0
+C055,Cand_055,"frances,portugues","africa_este,mena",longo,0,0,0,,,0.0
+C056,Cand_056,arabe_basico,"africa_norte,mena",longo,0,0,0,,,0.0
+C057,Cand_057,"frances,ingles","africa_este,mena",medio,2,0,2,V010,Evangelismo em Quenia,97.5
+C058,Cand_058,ingles,"africa_norte,america_sul",longo,0,0,0,,,0.0
+C059,Cand_059,"arabe_basico,ingles","africa_norte,america_sul",local,0,0,0,,,0.0
+C060,Cand_060,"arabe_basico,frances",asia_sul,longo,0,0,0,,,0.0
