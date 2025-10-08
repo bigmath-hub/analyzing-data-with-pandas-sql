@@ -1,10 +1,71 @@
 import pandas as pd
 
-def public_vagas(path_o="data/samples/oportunidades.csv", path_c="data/outputs/candidaturas.csv") -> pd.DataFrame:
+def public_vagas(
+        path_o="data/samples/oportunidades.csv", 
+        path_c="data/outputs/candidaturas.csv"
+) -> pd.DataFrame:
     
+    # carregar as bases
+    df_o = pd.read_csv(
+        path_o, 
+        dtype={"id": "string", "status": "string", "agencia_id": "string"}
+    )
+    df_c = pd.read_csv(
+        path_c,
+        dtype={"vaga_id": "string", "cand_id": "string", "score": float}
+    )
 
-    df_o = pd.read_csv(path_o, dtype={"id": "string", "status": "string", "agencia_id": "string"})
-    df_c = pd.read_csv(path_c, dtype={"vaga_id": "string", "cand_id": "string", "score": float})        
+    if df_c.empty:
+        cont_cand = pd.DataFrame(
+            0,
+            index='df_o['id'],
+            columns=['sugestao', 'sorteio']
+        )
+        top1 = pd.DataFrame(
+            {'cand_id': "", 'score': 0.0},
+            index=df_o['id']
+        )
+    else:
+        # contagem por origem
+        cont_cand = (
+            df_c.groupby('vaga_id')['origem']
+            .value_counts()
+            .unstack()
+            .reindex(columns=['sugestao', 'sorteio'], fill_value=0)
+            .astype(int)
+        )
+
+        # melhor candidato por vaga
+        idx = df_c.groupby('vaga_id')['score'].idxmax()
+        top1 = (
+            df_c.loc[idx, ['vaga_id', 'cand_id', 'score']]
+            .set_index['vaga_id']
+        )
+        top1 = top1.reindex(df_o['id']).fillna({'cand_id': "", 'score': 0.0})
+
+    # merges
+    base = (
+        df_o
+        .merge(cont_cand, how='left', left_on='id', right_index=True)
+        .merge(top1, how='left', left_on='id', right_index=True)
+    )
+
+    # limpeza
+    for col in ['sugestao', 'sorteio']:
+        base[col] = base[col].fillna(0).astype(int)
+
+    base['score'] = base['score'].fillna(0.0).astype(float)
+    base['cand'] = base['cand'].fillna("").astype("string")
+    
+    base['cands_total'] = base['sugestao'] + base['sorteio']
+
+    # renomear
+    ren = {
+        'id': 'vaga_id',
+        'sugestao': 'cands_sugestao'
+    }
+
+
     cont_cand = df_c.groupby('vaga_id')['origem'].value_counts().unstack().reindex(columns=["sugestao","sorteio"], fill_value=0)    
     melhores_linhas = df_c.loc[df_c.groupby('vaga_id')['score'].idxmax()]
     top1_cand = melhores_linhas.set_index('vaga_id')[['cand_id', 'score']]        
