@@ -1,0 +1,16 @@
+RESUMO — visões públicas
+--------------------------
+Vagas: 20 (cobertas: 4) | Urgentes: 3
+Candidatos: 60 (com inscrições: 6)
+Faixa de top scores: 95.0 – 97.5
+Status de vagas: {'em_selecao': 5, 'expirada': 7, 'preenchida': 2, 'publicada': 1, 'rascunho': 5}
+
+Top 3 vagas por candidatos:
+- V001 • Discipulado em Jordania — 2 inscrições
+- V010 • Evangelismo em Quenia — 2 inscrições
+- V017 • Ti Suporte em Jordania — 2 inscrições
+
+Top 3 candidatos por inscrições:
+- C057 • Cand_057 — 2 inscrições | melhor vaga: “Evangelismo em Quenia” (score 97.5)
+- C006 • Cand_006 — 1 inscrições | melhor vaga: “Evangelismo em Quenia” (score 75.0)
+- C008 • Cand_008 — 1 inscrições | melhor vaga: “Saude Basica em Quenia” (score 95.0)

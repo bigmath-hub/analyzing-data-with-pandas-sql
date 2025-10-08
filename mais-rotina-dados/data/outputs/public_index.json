@@ -1,0 +1,13 @@
+{
+  "totals": {
+    "vagas": 20,
+    "vagas_cobertas": 4,
+    "urgentes": 3,
+    "candidatos": 60,
+    "candidatos_com_inscricoes": 6
+  },
+  "top_scores": {
+    "min": 95.0,
+    "max": 97.5
+  }
+}
